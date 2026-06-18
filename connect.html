@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Connect — Eshaant Dayapule</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2306060a'/%3E%3Ccircle cx='12' cy='12' r='3' fill='%2300f0ff'/%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' dominant-baseline='middle' font-family='monospace' font-size='38' font-weight='700' fill='url(%23g)'%3EE%3C/text%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2300f0ff'/%3E%3Cstop offset='1' stop-color='%238b5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E" />
+<meta name="description" content="Find Eshaant in the noise of the network. DMs open." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#06060a;--ink:#e8e8f0;--muted:#8a8aa3;--cyan:#00f0ff;--violet:#8b5cf6;--pink:#ff2d8a;--lime:#a3ff12;--line:rgba(255,255,255,0.08);--card:rgba(255,255,255,0.03);--card-border:rgba(255,255,255,0.08)}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;line-height:1.6;overflow-x:hidden;cursor:none}
+@media(max-width:900px){body{cursor:auto}}
+a{color:inherit;text-decoration:none;cursor:none}
+@media(max-width:900px){a{cursor:pointer}}
+
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;border-radius:50%;mix-blend-mode:difference}
+.cursor-dot{width:6px;height:6px;background:#fff;transform:translate(-50%,-50%)}
+.cursor-ring{width:36px;height:36px;border:1px solid rgba(255,255,255,0.6);transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s}
+.cursor-ring.hover{width:60px;height:60px;border-color:var(--cyan)}
+@media(max-width:900px){.cursor-dot,.cursor-ring{display:none}}
+
+.loader{position:fixed;inset:0;background:var(--bg);z-index:9998;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity .8s ease,visibility .8s}
+.loader.hidden{opacity:0;visibility:hidden}
+.loader-text{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.3em;margin-bottom:20px}
+.loader-bar{width:240px;height:1px;background:rgba(255,255,255,0.08);overflow:hidden;position:relative}
+.loader-bar::after{content:"";position:absolute;left:0;top:0;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--violet));animation:load 1.8s ease-in-out forwards}
+@keyframes load{to{width:100%}}
+
+#neural{position:fixed;inset:0;z-index:0;opacity:.55}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(6,6,10,0.55);border-bottom:1px solid var(--line)}
+.logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;letter-spacing:.15em;display:flex;align-items:center;gap:10px}
+.logo-dot{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 12px var(--lime);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.nav-links{display:flex;gap:28px;font-size:13px;color:var(--muted)}
+.nav-links a{position:relative;transition:color .3s}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:-6px;height:1px;width:0;background:var(--cyan);transition:width .3s}
+.nav-links a:hover::after{width:100%}
+.nav-links a.active{color:var(--cyan)}
+.nav-links a.active::after{width:100%}
+
+.nav-mobile{display:none}
+@media(max-width:900px){
+  .nav-links{display:none}
+  .nav-mobile{display:flex;gap:10px;font-size:11px;padding:14px 24px;overflow-x:auto;background:rgba(6,6,10,0.6);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);position:fixed;top:60px;left:0;right:0;z-index:99;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;color:var(--muted)}
+  .nav-mobile a{padding:6px 12px;border:1px solid var(--card-border);border-radius:6px;flex-shrink:0;transition:all .3s}
+  .nav-mobile a:hover{border-color:var(--cyan);color:var(--cyan)}
+  .nav-mobile a.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,240,255,0.05)}
+}
+
+main{position:relative;z-index:2}
+.page-head{padding:160px 32px 60px;max-width:1200px;margin:0 auto;position:relative}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;color:var(--cyan);text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:24px;height:1px;background:var(--cyan)}
+.page-title{font-size:clamp(48px,9vw,108px);font-weight:700;line-height:.95;letter-spacing:-.03em;margin-bottom:24px}
+.page-title .grad{background:linear-gradient(120deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.page-sub{color:var(--muted);font-size:clamp(16px,1.6vw,20px);max-width:680px}
+
+section{padding:60px 32px;max-width:1200px;margin:0 auto;position:relative}
+
+.big-cta{padding:40px 32px 80px;max-width:1200px;margin:0 auto;position:relative;display:grid;grid-template-columns:1.3fr 1fr;gap:60px;align-items:center}
+@media(max-width:900px){.big-cta{grid-template-columns:1fr;gap:40px}}
+
+.cta-left .page-title{font-size:clamp(42px,7vw,90px)}
+.cta-left p{color:var(--muted);font-size:18px;margin-bottom:30px;max-width:540px}
+.cta-left .note{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-top:18px;padding:12px 16px;border-left:2px solid var(--cyan);background:rgba(0,240,255,0.04);border-radius:0 8px 8px 0;max-width:540px}
+.cta-left .note b{color:var(--cyan);font-weight:500}
+
+.cta-btns{display:flex;flex-direction:column;gap:14px}
+.btn{padding:16px 22px;border-radius:12px;font-size:15px;font-weight:500;display:flex;align-items:center;gap:14px;transition:all .3s;border:1px solid var(--card-border);background:var(--card)}
+.btn:hover{transform:translateY(-2px);border-color:var(--cyan)}
+.btn-primary{background:linear-gradient(120deg,var(--cyan),var(--violet));color:#000;border-color:transparent;font-weight:600}
+.btn-primary:hover{box-shadow:0 0 30px rgba(0,240,255,0.4)}
+.btn-ghost-v{background:var(--card);color:var(--ink)}
+.btn-icn{width:36px;height:36px;border-radius:8px;background:rgba(0,240,255,0.1);display:grid;place-items:center;color:var(--cyan);flex-shrink:0;font-size:16px}
+.btn-primary .btn-icn{background:rgba(0,0,0,0.15);color:#000}
+.btn-text{flex:1;display:flex;flex-direction:column;align-items:flex-start}
+.btn-text b{font-size:14px;font-weight:500}
+.btn-text span{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+.btn-primary .btn-text span{color:rgba(0,0,0,0.6)}
+.btn-arrow{margin-left:auto;color:var(--muted);transition:transform .3s}
+.btn-primary .btn-arrow{color:rgba(0,0,0,0.6)}
+.btn:hover .btn-arrow{transform:translate(3px,-3px);color:var(--cyan)}
+.btn-primary:hover .btn-arrow{color:#000}
+
+.cta-right{position:relative}
+.contact-card{border:1px solid var(--card-border);background:var(--card);border-radius:18px;padding:32px;position:relative;overflow:hidden}
+.contact-card::before{content:"";position:absolute;inset:-1px;border-radius:18px;background:linear-gradient(135deg,transparent 30%,rgba(0,240,255,0.4),transparent 70%);-webkit-mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);-webkit-mask-composite:xor;mask-composite:exclude;padding:1px;pointer-events:none}
+.term-head{display:flex;align-items:center;gap:8px;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.term-dot{width:10px;height:10px;border-radius:50%}
+.term-dot.r{background:#ff5f57}.term-dot.y{background:#ffbd2e}.term-dot.g{background:#28c840}
+.term-title{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+
+.term-body{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.9;color:var(--muted)}
+.term-body b{color:var(--cyan);font-weight:400}
+.term-body i{color:var(--lime);font-style:normal}
+.term-body .k{color:var(--violet)}
+.term-body .s{color:var(--pink)}
+.typed-line{margin-top:8px}
+.typed-line .cursor{display:inline-block;width:7px;height:13px;background:var(--cyan);margin-left:2px;vertical-align:middle;animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+
+.socials-section{padding:60px 32px;max-width:1200px;margin:0 auto;position:relative}
+.section-head{margin-bottom:40px}
+.section-head h2{font-size:clamp(28px,4vw,44px);font-weight:600;line-height:1.1;letter-spacing:-.02em;margin-bottom:10px}
+.section-head p{color:var(--muted);max-width:540px}
+
+.socials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:800px){.socials-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.socials-grid{grid-template-columns:1fr}}
+.social{border:1px solid var(--card-border);background:var(--card);border-radius:14px;padding:24px;transition:all .4s;position:relative;overflow:hidden;display:block}
+.social::after{content:"↗";position:absolute;top:20px;right:20px;color:var(--muted);transition:all .3s;font-size:18px}
+.social:hover{border-color:rgba(0,240,255,0.3);transform:translateY(-3px);background:rgba(0,240,255,0.03)}
+.social:hover::after{color:var(--cyan);transform:translate(3px,-3px)}
+.s-icn{width:48px;height:48px;border-radius:12px;background:rgba(0,240,255,0.08);display:grid;place-items:center;color:var(--cyan);margin-bottom:18px;font-size:22px}
+.social.b .s-icn{background:rgba(139,92,246,0.08);color:var(--violet)}
+.social.p .s-icn{background:rgba(255,45,138,0.08);color:var(--pink)}
+.social.l .s-icn{background:rgba(163,255,18,0.08);color:var(--lime)}
+.s-name{font-size:16px;font-weight:600;margin-bottom:4px}
+.s-handle{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-bottom:10px}
+.s-desc{color:var(--muted);font-size:13px;line-height:1.5}
+
+.topics-section{padding:80px 32px;max-width:1200px;margin:0 auto;position:relative}
+.topics-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(max-width:700px){.topics-grid{grid-template-columns:1fr}}
+.topic{border:1px solid var(--card-border);background:var(--card);border-radius:10px;padding:18px 22px;display:flex;align-items:center;gap:16px;transition:all .3s}
+.topic:hover{border-color:rgba(0,240,255,0.3);transform:translateX(4px)}
+.t-mark{width:8px;height:8px;border-radius:50%;background:var(--cyan);flex-shrink:0;box-shadow:0 0 8px var(--cyan)}
+.t-mark.v{background:var(--violet);box-shadow:0 0 8px var(--violet)}
+.t-mark.p{background:var(--pink);box-shadow:0 0 8px var(--pink)}
+.t-mark.l{background:var(--lime);box-shadow:0 0 8px var(--lime)}
+.t-text b{display:block;font-size:14px;font-weight:500;margin-bottom:2px}
+.t-text span{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+
+footer{border-top:1px solid var(--line);padding:40px 32px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);position:relative;z-index:2;flex-wrap:wrap;gap:14px;margin-top:60px}
+footer a{transition:color .3s}
+footer a:hover{color:var(--cyan)}
+footer .blink{color:var(--lime);animation:pulse 1.5s ease-in-out infinite}
+
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .9s ease,transform .9s ease}
+.reveal.in{opacity:1;transform:none}
+
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.35;pointer-events:none;z-index:0}
+.orb-1{width:500px;height:500px;background:var(--cyan);top:10%;left:-150px}
+.orb-2{width:500px;height:500px;background:var(--violet);top:60%;right:-150px}
+.orb-3{width:400px;height:400px;background:var(--pink);bottom:0;left:30%}
+</style>
+</head>
+<body>
+
+<div class="loader" id="loader">
+  <div class="loader-text">OPENING CHANNELS</div>
+  <div class="loader-bar"></div>
+</div>
+
+<div class="cursor-dot" id="cDot"></div>
+<div class="cursor-ring" id="cRing"></div>
+
+<canvas id="neural"></canvas>
+<div class="grain"></div>
+
+<nav>
+  <a href="index.html" class="logo"><span class="logo-dot"></span> ESHAANT/DAYAPULE</a>
+  <div class="nav-links">
+    <a href="index.html">home</a>
+    <a href="stack.html">stack</a>
+    <a href="journey.html">journey</a>
+    <a href="manifesto.html">manifesto</a>
+    <a href="connect.html" class="active">connect</a>
+  </div>
+</nav>
+<div class="nav-mobile">
+  <a href="index.html">home</a>
+  <a href="stack.html">stack</a>
+  <a href="journey.html">journey</a>
+  <a href="manifesto.html">manifesto</a>
+  <a href="connect.html" class="active">connect</a>
+</div>
+
+<main>
+
+<div class="page-head">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="eyebrow reveal">// 005 — talk to me</div>
+  <h1 class="page-title reveal">Find me in the<br/><span class="grad">noise</span> of the network.</h1>
+  <p class="page-sub reveal">I'm here to learn from builders and document. If you're working in AI, robotics, hardware, or any layer of the stack — let's talk. <b style="color:var(--ink)">DMs are open.</b></p>
+</div>
+
+<section class="big-cta">
+  <div class="cta-left reveal">
+    <h2 class="page-title">Let's <span class="grad">build</span> something.</h2>
+    <p>The fastest way to learn is to talk to people already doing it. The second fastest is to build alongside them. I'm down for both.</p>
+
+    <div class="cta-btns">
+      <a class="btn btn-primary" href="https://x.com/eshaantstack" target="_blank" rel="noopener">
+        <div class="btn-icn">𝕏</div>
+        <div class="btn-text"><b>DM me on Twitter / X</b><span>@eshaantstack</span></div>
+        <div class="btn-arrow">→</div>
+      </a>
+      <a class="btn btn-ghost-v" href="mailto:hi@eshaant.dev">
+        <div class="btn-icn">✉</div>
+        <div class="btn-text"><b>Send an email</b><span>hi@eshaant.dev</span></div>
+        <div class="btn-arrow">→</div>
+      </a>
+      <a class="btn btn-ghost-v" href="#">
+        <div class="btn-icn">{ }</div>
+        <div class="btn-text"><b>Open an issue on GitHub</b><span>@eshaantstack</span></div>
+        <div class="btn-arrow">→</div>
+      </a>
+    </div>
+
+    <div class="note">
+      <b>// note:</b> I read every message. I reply to most. If you're building something interesting, expect a fast response — I love swapping notes on architecture and debugging war stories.
+    </div>
+  </div>
+
+  <div class="cta-right reveal">
+    <div class="contact-card">
+      <div class="term-head">
+        <div class="term-dot r"></div>
+        <div class="term-dot y"></div>
+        <div class="term-dot g"></div>
+        <div class="term-title">~/connect.sh</div>
+      </div>
+      <div class="term-body">
+        <span><b>$</b> whoami</span>
+        <span>eshaant · 18 · hyderabad</span>
+        <span><b>$</b> cat interests.txt</span>
+        <span>→ transformers, cuda, robotics</span>
+        <span>→ embodied ai, agents</span>
+        <span>→ hardware, first principles</span>
+        <span>→ writing, teaching, learning</span>
+        <span><b>$</b> ./connect --method</span>
+        <span style="color:var(--ink)">[1]</span> tweet @ <span class="s">"@eshaantstack"</span>
+        <span style="color:var(--ink)">[2]</span> mail  <span class="s">"hi@eshaant.dev"</span>
+        <span style="color:var(--ink)">[3]</span> github issue
+        <span><b>$</b> best_for</span>
+        <span>→ paper recommendations</span>
+        <span>→ build collabs</span>
+        <span>→ debugging horror stories</span>
+        <span>→ mentorship (i'll take it)</span>
+        <div class="typed-line"><b>$</b> <span id="typed"></span><span class="cursor"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="socials-section">
+  <div class="section-head reveal">
+    <div class="eyebrow">// everywhere else</div>
+    <h2>Or find me <span style="background:linear-gradient(120deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent">around the web</span>.</h2>
+    <p>Same username everywhere. Usually. Sometimes I forget.</p>
+  </div>
+
+  <div class="socials-grid">
+    <a class="social reveal" href="https://x.com/eshaantstack" target="_blank" rel="noopener">
+      <div class="s-icn">𝕏</div>
+      <div class="s-name">Twitter / X</div>
+      <div class="s-handle">@eshaantstack</div>
+      <div class="s-desc">Daily builds, paper threads, and the occasional rant about CUDA kernels.</div>
+    </a>
+
+    <a class="social b reveal" href="#">
+      <div class="s-icn">{ }</div>
+      <div class="s-name">GitHub</div>
+      <div class="s-handle">@eshaantstack</div>
+      <div class="s-desc">Tiny LLM reproductions, robotics sims, and a lot of half-finished experiments.</div>
+    </a>
+
+    <a class="social p reveal" href="#">
+      <div class="s-icn">✎</div>
+      <div class="s-name">Blog / Notes</div>
+      <div class="s-handle">eshaant.dev/notes</div>
+      <div class="s-desc">Feynman-style writeups, paper breakdowns, build logs from the journey page.</div>
+    </a>
+
+    <a class="social l reveal" href="#">
+      <div class="s-icn">◉</div>
+      <div class="s-name">YouTube</div>
+      <div class="s-handle">@eshaantstack</div>
+      <div class="s-desc">Long-form coding sessions and "build with me" videos. Coming soon.</div>
+    </a>
+
+    <a class="social reveal" href="#">
+      <div class="s-icn">⌘</div>
+      <div class="s-name">Hacker News</div>
+      <div class="s-handle">@eshaantstack</div>
+      <div class="s-desc">Occasional lurker, rarer commenter. Reading the threads is half the education.</div>
+    </a>
+
+    <a class="social b reveal" href="mailto:hi@eshaant.dev">
+      <div class="s-icn">✉</div>
+      <div class="s-name">Email (direct)</div>
+      <div class="s-handle">hi@eshaant.dev</div>
+      <div class="s-desc">For longer threads, collaboration pitches, or anything that doesn't fit a DM.</div>
+    </a>
+  </div>
+</section>
+
+<section class="topics-section">
+  <div class="section-head reveal">
+    <div class="eyebrow">// ping me about</div>
+    <h2>Things I want to <span style="background:linear-gradient(120deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent">talk about</span>.</h2>
+    <p>Topics where I'm actively learning and would love a conversation.</p>
+  </div>
+
+  <div class="topics-grid">
+    <div class="topic reveal"><div class="t-mark"></div><div class="t-text"><b>Transformer internals</b><span>attention, MoE, scaling laws</span></div></div>
+    <div class="topic reveal"><div class="t-mark v"></div><div class="t-text"><b>CUDA & GPU programming</b><span>kernels, memory, perf</span></div></div>
+    <div class="topic reveal"><div class="t-mark p"></div><div class="t-text"><b>Embodied AI / robotics</b><span>sim2real, control, sensors</span></div></div>
+    <div class="topic reveal"><div class="t-mark l"></div><div class="t-text"><b>Hardware design</b><span>verilog, fpga, chip basics</span></div></div>
+    <div class="topic reveal"><div class="t-mark"></div><div class="t-text"><b>Build-in-public tactics</b><span>writing, threads, content</span></div></div>
+    <div class="topic reveal"><div class="t-mark v"></div><div class="t-text"><b>Open source collaboration</b><span>PRs, issues, maintainers</span></div></div>
+    <div class="topic reveal"><div class="t-mark p"></div><div class="t-text"><b>Learning paths & curricula</b><span>how to study this stuff well</span></div></div>
+    <div class="topic reveal"><div class="t-mark l"></div><div class="t-text"><b>Cool side projects</b><span>show me what you're building</span></div></div>
+  </div>
+</section>
+
+<footer>
+  <div>© 2026 <a href="index.html">ESHAANT DAYAPULE</a> · CHANNELS = OPEN</div>
+  <div>SYS <span class="blink">●</span> ONLINE</div>
+</footer>
+
+</main>
+
+<script>
+window.addEventListener('load',()=>{setTimeout(()=>document.getElementById('loader').classList.add('hidden'),1900)});
+
+const cDot=document.getElementById('cDot'),cRing=document.getElementById('cRing');
+let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
+addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cDot.style.transform=`translate(${mx}px,${my}px) translate(-50%,-50%)`});
+function loop(){rx+=(mx-rx)*.18;ry+=(my-ry)*.18;cRing.style.transform=`translate(${rx}px,${ry}px) translate(-50%,-50%)`;requestAnimationFrame(loop)}
+loop();
+document.querySelectorAll('a,button,.btn,.social,.topic').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cRing.classList.add('hover'));
+  el.addEventListener('mouseleave',()=>cRing.classList.remove('hover'));
+});
+
+const c=document.getElementById('neural'),ctx=c.getContext('2d');
+let w,h,nodes=[];
+function resize(){w=c.width=innerWidth;h=c.height=innerHeight;init()}
+addEventListener('resize',resize);
+function init(){nodes=[];const count=Math.min(90,Math.floor((w*h)/18000));for(let i=0;i<count;i++)nodes.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.5+0.5})}
+function draw(){
+  ctx.clearRect(0,0,w,h);
+  for(let i=0;i<nodes.length;i++){for(let j=i+1;j<nodes.length;j++){const a=nodes[i],b=nodes[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<140){const o=1-d/140;ctx.strokeStyle=`rgba(0,240,255,${o*0.25})`;ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}}}
+  nodes.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>w)n.vx*=-1;if(n.y<0||n.y>h)n.vy*=-1;ctx.fillStyle='rgba(139,92,246,0.9)';ctx.shadowBlur=12;ctx.shadowColor='rgba(0,240,255,0.6)';ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fill()});
+  ctx.shadowBlur=0;requestAnimationFrame(draw);
+}
+resize();draw();
+
+const lines=["hello there 👋","ready to build?","let's connect →"];
+let li=0,ci=0,del=false;
+const tEl=document.getElementById('typed');
+function type(){
+  const cur=lines[li];
+  if(!del){tEl.textContent=cur.slice(0,++ci);if(ci===cur.length){del=true;setTimeout(type,1600);return}}
+  else{tEl.textContent=cur.slice(0,--ci);if(ci===0){del=false;li=(li+1)%lines.length}}
+  setTimeout(type,del?40:80);
+}
+setTimeout(type,2200);
+
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

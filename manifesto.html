@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Manifesto — Eshaant Dayapule</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2306060a'/%3E%3Ccircle cx='12' cy='12' r='3' fill='%2300f0ff'/%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' dominant-baseline='middle' font-family='monospace' font-size='38' font-weight='700' fill='url(%23g)'%3EE%3C/text%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2300f0ff'/%3E%3Cstop offset='1' stop-color='%238b5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E" />
+<meta name="description" content="The north star: understand, master, build. Document everything." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#06060a;--ink:#e8e8f0;--muted:#8a8aa3;--cyan:#00f0ff;--violet:#8b5cf6;--pink:#ff2d8a;--lime:#a3ff12;--line:rgba(255,255,255,0.08);--card:rgba(255,255,255,0.03);--card-border:rgba(255,255,255,0.08)}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;line-height:1.6;overflow-x:hidden;cursor:none}
+@media(max-width:900px){body{cursor:auto}}
+a{color:inherit;text-decoration:none;cursor:none}
+@media(max-width:900px){a{cursor:pointer}}
+
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;border-radius:50%;mix-blend-mode:difference}
+.cursor-dot{width:6px;height:6px;background:#fff;transform:translate(-50%,-50%)}
+.cursor-ring{width:36px;height:36px;border:1px solid rgba(255,255,255,0.6);transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s}
+.cursor-ring.hover{width:60px;height:60px;border-color:var(--cyan)}
+@media(max-width:900px){.cursor-dot,.cursor-ring{display:none}}
+
+.loader{position:fixed;inset:0;background:var(--bg);z-index:9998;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity .8s ease,visibility .8s}
+.loader.hidden{opacity:0;visibility:hidden}
+.loader-text{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.3em;margin-bottom:20px}
+.loader-bar{width:240px;height:1px;background:rgba(255,255,255,0.08);overflow:hidden;position:relative}
+.loader-bar::after{content:"";position:absolute;left:0;top:0;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--violet));animation:load 1.8s ease-in-out forwards}
+@keyframes load{to{width:100%}}
+
+#neural{position:fixed;inset:0;z-index:0;opacity:.55}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(6,6,10,0.55);border-bottom:1px solid var(--line)}
+.logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;letter-spacing:.15em;display:flex;align-items:center;gap:10px}
+.logo-dot{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 12px var(--lime);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.nav-links{display:flex;gap:28px;font-size:13px;color:var(--muted)}
+.nav-links a{position:relative;transition:color .3s}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:-6px;height:1px;width:0;background:var(--cyan);transition:width .3s}
+.nav-links a:hover::after{width:100%}
+.nav-links a.active{color:var(--cyan)}
+.nav-links a.active::after{width:100%}
+
+.nav-mobile{display:none}
+@media(max-width:900px){
+  .nav-links{display:none}
+  .nav-mobile{display:flex;gap:10px;font-size:11px;padding:14px 24px;overflow-x:auto;background:rgba(6,6,10,0.6);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);position:fixed;top:60px;left:0;right:0;z-index:99;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;color:var(--muted)}
+  .nav-mobile a{padding:6px 12px;border:1px solid var(--card-border);border-radius:6px;flex-shrink:0;transition:all .3s}
+  .nav-mobile a:hover{border-color:var(--cyan);color:var(--cyan)}
+  .nav-mobile a.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,240,255,0.05)}
+}
+
+main{position:relative;z-index:2}
+.page-head{padding:160px 32px 80px;max-width:1100px;margin:0 auto;position:relative;text-align:center}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;color:var(--cyan);text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:10px;justify-content:center}
+.eyebrow::before,.eyebrow::after{content:"";width:24px;height:1px;background:var(--cyan)}
+.page-title{font-size:clamp(48px,10vw,140px);font-weight:700;line-height:.95;letter-spacing:-.04em;margin-bottom:30px}
+.page-title .grad{background:linear-gradient(120deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.page-sub{color:var(--muted);font-size:clamp(16px,1.6vw,20px);max-width:680px;margin:0 auto}
+
+section{padding:60px 32px;max-width:1100px;margin:0 auto;position:relative}
+
+.principles{padding:80px 32px;max-width:1100px;margin:0 auto;position:relative}
+.principle{padding:50px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:120px 1fr;gap:40px;align-items:start}
+.principle:last-child{border-bottom:none}
+@media(max-width:700px){.principle{grid-template-columns:1fr;gap:14px}}
+.p-num{font-family:'JetBrains Mono',monospace;font-size:80px;font-weight:300;color:rgba(255,255,255,0.06);line-height:1;letter-spacing:-.05em}
+.p-num b{color:var(--cyan);font-weight:300}
+.p-body h3{font-size:clamp(26px,3.5vw,42px);font-weight:600;line-height:1.1;letter-spacing:-.02em;margin-bottom:14px}
+.p-body h3 .ac{color:var(--cyan)}
+.p-body p{color:var(--muted);font-size:17px;line-height:1.7;max-width:680px}
+.p-body .p-tags{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+.p-tag{padding:5px 12px;border-radius:6px;background:rgba(0,240,255,0.06);border:1px solid rgba(0,240,255,0.2);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cyan);letter-spacing:.05em}
+
+.closing{padding:100px 32px;max-width:900px;margin:0 auto;position:relative;text-align:center}
+.big-quote{font-size:clamp(28px,4vw,56px);font-weight:300;line-height:1.15;letter-spacing:-.02em;margin-bottom:40px}
+.big-quote b{color:var(--cyan);font-weight:500}
+.big-quote i{color:var(--violet);font-style:normal;font-weight:500}
+.sig{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.2em;margin-top:30px}
+.sig b{color:var(--ink);font-weight:500}
+
+.cta-row{display:flex;gap:14px;margin-top:40px;flex-wrap:wrap;justify-content:center}
+.btn{padding:14px 22px;border-radius:10px;font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:10px;transition:all .3s;border:1px solid var(--card-border)}
+.btn-primary{background:linear-gradient(120deg,var(--cyan),var(--violet));color:#000;border-color:transparent;font-weight:600}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(0,240,255,0.35)}
+.btn-ghost{background:var(--card);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
+.btn .arrow{transition:transform .3s}
+.btn:hover .arrow{transform:translate(3px,-3px)}
+
+footer{border-top:1px solid var(--line);padding:40px 32px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);position:relative;z-index:2;flex-wrap:wrap;gap:14px}
+footer a{transition:color .3s}
+footer a:hover{color:var(--cyan)}
+footer .blink{color:var(--lime);animation:pulse 1.5s ease-in-out infinite}
+
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .9s ease,transform .9s ease}
+.reveal.in{opacity:1;transform:none}
+
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.35;pointer-events:none;z-index:0}
+.orb-1{width:500px;height:500px;background:var(--cyan);top:15%;left:-150px}
+.orb-2{width:500px;height:500px;background:var(--violet);top:50%;right:-150px}
+.orb-3{width:400px;height:400px;background:var(--pink);bottom:0;left:30%}
+
+.type-hero{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--muted);letter-spacing:.1em;margin-top:20px;min-height:24px}
+.type-hero b{color:var(--cyan);font-weight:400}
+.type-hero .cursor{display:inline-block;width:8px;height:14px;background:var(--cyan);margin-left:2px;vertical-align:middle;animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+</style>
+</head>
+<body>
+
+<div class="loader" id="loader">
+  <div class="loader-text">READING MANIFESTO.MD</div>
+  <div class="loader-bar"></div>
+</div>
+
+<div class="cursor-dot" id="cDot"></div>
+<div class="cursor-ring" id="cRing"></div>
+
+<canvas id="neural"></canvas>
+<div class="grain"></div>
+
+<nav>
+  <a href="index.html" class="logo"><span class="logo-dot"></span> ESHAANT/DAYAPULE</a>
+  <div class="nav-links">
+    <a href="index.html">home</a>
+    <a href="stack.html">stack</a>
+    <a href="journey.html">journey</a>
+    <a href="manifesto.html" class="active">manifesto</a>
+    <a href="connect.html">connect</a>
+  </div>
+</nav>
+<div class="nav-mobile">
+  <a href="index.html">home</a>
+  <a href="stack.html">stack</a>
+  <a href="journey.html">journey</a>
+  <a href="manifesto.html" class="active">manifesto</a>
+  <a href="connect.html">connect</a>
+</div>
+
+<main>
+
+<div class="page-head">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="eyebrow reveal">// 004 — the north star</div>
+  <h1 class="page-title reveal">A small<br/><span class="grad">manifesto</span>.</h1>
+  <p class="page-sub reveal">Five lines I keep returning to. The rules I'm building by, in public, while I'm still figuring it out.</p>
+  <div class="type-hero reveal"><b>$ cat</b> manifesto.md <span class="cursor"></span></div>
+</div>
+
+<div class="principles">
+
+  <div class="principle reveal">
+    <div class="p-num"><b>01</b></div>
+    <div class="p-body">
+      <h3>Understand the <span class="ac">silicon</span>.</h3>
+      <p>The model runs on physics. Transistors, gates, cache lines, GPU warps. You can't truly master the upper layers until you respect what's underneath them. Skip this and you'll be forever cargo-culting.</p>
+      <div class="p-tags"><span class="p-tag">first principles</span><span class="p-tag">physics-aware</span></div>
+    </div>
+  </div>
+
+  <div class="principle reveal">
+    <div class="p-num"><b>02</b></div>
+    <div class="p-body">
+      <h3>Master the <span class="ac">neural net</span>.</h3>
+      <p>Read the papers. Reproduce them. Break them. Don't outsource your understanding to an API. The best engineers of this era will be the ones who can both use the tool and explain how the tool works.</p>
+      <div class="p-tags"><span class="p-tag">math</span><span class="p-tag">from scratch</span><span class="p-tag">paper-reading</span></div>
+    </div>
+  </div>
+
+  <div class="principle reveal">
+    <div class="p-num"><b>03</b></div>
+    <div class="p-body">
+      <h3>Build the <span class="ac">embodied mind</span>.</h3>
+      <p>Intelligence that moves is the next chapter. Robotics, agents in the wild, sim-to-real — theory meets friction, friction teaches truth. This is where the future gets interesting.</p>
+      <div class="p-tags"><span class="p-tag">embodied ai</span><span class="p-tag">robotics</span><span class="p-tag">agents</span></div>
+    </div>
+  </div>
+
+  <div class="principle reveal">
+    <div class="p-num"><b>04</b></div>
+    <div class="p-body">
+      <h3>Document <span class="ac">everything</span>.</h3>
+      <p>Not for clout. Not for the algorithm. Because teaching is the fastest way to learn — and because somewhere, someone is a few weeks behind me and needs the map. Build-in-public is a discipline, not a tactic.</p>
+      <div class="p-tags"><span class="p-tag">build-in-public</span><span class="p-tag">teach-to-learn</span></div>
+    </div>
+  </div>
+
+  <div class="principle reveal">
+    <div class="p-num"><b>05</b></div>
+    <div class="p-body">
+      <h3>Stay a <span class="ac">beginner</span>.</h3>
+      <p>The day you think you've arrived is the day you start falling behind. Reserve deliberate space to be wrong, often and quickly. Curiosity is a renewable resource — use it generously.</p>
+      <div class="p-tags"><span class="p-tag">humility</span><span class="p-tag">tinkerer</span><span class="p-tag">∞ curiosity</span></div>
+    </div>
+  </div>
+
+</div>
+
+<section class="closing">
+  <div class="orb orb-3"></div>
+  <div class="eyebrow reveal">// signed</div>
+  <p class="big-quote reveal">
+    I don't know what I'll be building<br/>
+    five years from now.<br/><br/>
+    But I know <b>how</b> I'll be building:<br/>
+    <i>understand</i>, then <i>master</i>, then <i>build</i>.<br/><br/>
+    Repeat until science fiction is real.
+  </p>
+  <div class="sig reveal">— <b>ESHAANT DAYAPULE</b> · HYDERABAD · 2026 · v0.0.1</div>
+
+  <div class="cta-row reveal" style="margin-top:60px">
+    <a class="btn btn-primary" href="connect.html">say hello <span class="arrow">→</span></a>
+    <a class="btn btn-ghost" href="index.html">back home <span class="arrow">↗</span></a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div>© 2026 <a href="index.html">ESHAANT DAYAPULE</a> · PRINCIPLES = NON-NEGOTIABLE</div>
+  <div>SYS <span class="blink">●</span> ONLINE</div>
+</footer>
+
+<script>
+window.addEventListener('load',()=>{setTimeout(()=>document.getElementById('loader').classList.add('hidden'),1900)});
+
+const cDot=document.getElementById('cDot'),cRing=document.getElementById('cRing');
+let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
+addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cDot.style.transform=`translate(${mx}px,${my}px) translate(-50%,-50%)`});
+function loop(){rx+=(mx-rx)*.18;ry+=(my-ry)*.18;cRing.style.transform=`translate(${rx}px,${ry}px) translate(-50%,-50%)`;requestAnimationFrame(loop)}
+loop();
+document.querySelectorAll('a,button,.btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cRing.classList.add('hover'));
+  el.addEventListener('mouseleave',()=>cRing.classList.remove('hover'));
+});
+
+const c=document.getElementById('neural'),ctx=c.getContext('2d');
+let w,h,nodes=[];
+function resize(){w=c.width=innerWidth;h=c.height=innerHeight;init()}
+addEventListener('resize',resize);
+function init(){nodes=[];const count=Math.min(90,Math.floor((w*h)/18000));for(let i=0;i<count;i++)nodes.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.5+0.5})}
+function draw(){
+  ctx.clearRect(0,0,w,h);
+  for(let i=0;i<nodes.length;i++){for(let j=i+1;j<nodes.length;j++){const a=nodes[i],b=nodes[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<140){const o=1-d/140;ctx.strokeStyle=`rgba(0,240,255,${o*0.25})`;ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}}}
+  nodes.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>w)n.vx*=-1;if(n.y<0||n.y>h)n.vy*=-1;ctx.fillStyle='rgba(139,92,246,0.9)';ctx.shadowBlur=12;ctx.shadowColor='rgba(0,240,255,0.6)';ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fill()});
+  ctx.shadowBlur=0;requestAnimationFrame(draw);
+}
+resize();draw();
+
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

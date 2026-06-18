@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Journey — Eshaant Dayapule</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2306060a'/%3E%3Ccircle cx='12' cy='12' r='3' fill='%2300f0ff'/%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' dominant-baseline='middle' font-family='monospace' font-size='38' font-weight='700' fill='url(%23g)'%3EE%3C/text%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2300f0ff'/%3E%3Cstop offset='1' stop-color='%238b5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E" />
+<meta name="description" content="A public log of how Eshaant is going from first tweet to first build." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#06060a;--ink:#e8e8f0;--muted:#8a8aa3;--cyan:#00f0ff;--violet:#8b5cf6;--pink:#ff2d8a;--lime:#a3ff12;--line:rgba(255,255,255,0.08);--card:rgba(255,255,255,0.03);--card-border:rgba(255,255,255,0.08)}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;line-height:1.6;overflow-x:hidden;cursor:none}
+@media(max-width:900px){body{cursor:auto}}
+a{color:inherit;text-decoration:none;cursor:none}
+@media(max-width:900px){a{cursor:pointer}}
+
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;border-radius:50%;mix-blend-mode:difference}
+.cursor-dot{width:6px;height:6px;background:#fff;transform:translate(-50%,-50%)}
+.cursor-ring{width:36px;height:36px;border:1px solid rgba(255,255,255,0.6);transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s}
+.cursor-ring.hover{width:60px;height:60px;border-color:var(--cyan)}
+@media(max-width:900px){.cursor-dot,.cursor-ring{display:none}}
+
+.loader{position:fixed;inset:0;background:var(--bg);z-index:9998;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity .8s ease,visibility .8s}
+.loader.hidden{opacity:0;visibility:hidden}
+.loader-text{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.3em;margin-bottom:20px}
+.loader-bar{width:240px;height:1px;background:rgba(255,255,255,0.08);overflow:hidden;position:relative}
+.loader-bar::after{content:"";position:absolute;left:0;top:0;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--violet));animation:load 1.8s ease-in-out forwards}
+@keyframes load{to{width:100%}}
+
+#neural{position:fixed;inset:0;z-index:0;opacity:.55}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(6,6,10,0.55);border-bottom:1px solid var(--line)}
+.logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;letter-spacing:.15em;display:flex;align-items:center;gap:10px}
+.logo-dot{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 12px var(--lime);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.nav-links{display:flex;gap:28px;font-size:13px;color:var(--muted)}
+.nav-links a{position:relative;transition:color .3s}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:-6px;height:1px;width:0;background:var(--cyan);transition:width .3s}
+.nav-links a:hover::after{width:100%}
+.nav-links a.active{color:var(--cyan)}
+.nav-links a.active::after{width:100%}
+
+.nav-mobile{display:none}
+@media(max-width:900px){
+  .nav-links{display:none}
+  .nav-mobile{display:flex;gap:10px;font-size:11px;padding:14px 24px;overflow-x:auto;background:rgba(6,6,10,0.6);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);position:fixed;top:60px;left:0;right:0;z-index:99;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;color:var(--muted)}
+  .nav-mobile a{padding:6px 12px;border:1px solid var(--card-border);border-radius:6px;flex-shrink:0;transition:all .3s}
+  .nav-mobile a:hover{border-color:var(--cyan);color:var(--cyan)}
+  .nav-mobile a.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,240,255,0.05)}
+}
+
+main{position:relative;z-index:2}
+.page-head{padding:160px 32px 60px;max-width:1200px;margin:0 auto;position:relative}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;color:var(--cyan);text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:24px;height:1px;background:var(--cyan)}
+.page-title{font-size:clamp(48px,9vw,108px);font-weight:700;line-height:.95;letter-spacing:-.03em;margin-bottom:24px}
+.page-title .grad{background:linear-gradient(120deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.page-sub{color:var(--muted);font-size:clamp(16px,1.6vw,20px);max-width:680px}
+
+section{padding:60px 32px;max-width:1200px;margin:0 auto;position:relative}
+
+.meter-wrap{padding:0 32px 60px;max-width:1200px;margin:0 auto;position:relative}
+.meter{position:relative;padding:30px;border:1px solid var(--card-border);border-radius:14px;background:var(--card);display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.meter-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.15em}
+.meter-bar{flex:1;min-width:200px;height:6px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden;position:relative}
+.meter-fill{position:absolute;left:0;top:0;height:100%;width:18%;background:linear-gradient(90deg,var(--cyan),var(--violet));border-radius:3px;box-shadow:0 0 12px var(--cyan)}
+.meter-pct{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--cyan);font-weight:600}
+.meter-text{font-size:13px;color:var(--muted);width:100%}
+
+.timeline-wrap{padding:40px 32px;max-width:1200px;margin:0 auto;position:relative}
+.timeline{position:relative;padding-left:40px}
+.timeline::before{content:"";position:absolute;left:14px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--cyan) 0%,var(--violet) 60%,rgba(255,255,255,0.1) 100%)}
+
+.tl-item{position:relative;padding-bottom:60px;padding-left:20px}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:"";position:absolute;left:-32px;top:8px;width:15px;height:15px;border-radius:50%;background:var(--bg);border:2px solid var(--cyan);box-shadow:0 0 14px rgba(0,240,255,0.5);z-index:2}
+.tl-item.done::before{background:var(--cyan);box-shadow:0 0 14px var(--cyan)}
+.tl-item.now::before{background:var(--bg);border-color:var(--violet);box-shadow:0 0 14px rgba(139,92,246,0.5);animation:pulse 1.5s ease-in-out infinite}
+.tl-item.future::before{background:var(--bg);border-color:var(--muted);box-shadow:none;opacity:.6}
+
+.tl-card{border:1px solid var(--card-border);background:var(--card);border-radius:14px;padding:28px;transition:all .4s;position:relative;overflow:hidden}
+.tl-card:hover{border-color:rgba(0,240,255,0.3);transform:translateX(4px)}
+.tl-item.now .tl-card{border-color:rgba(139,92,246,0.3)}
+.tl-item.future .tl-card{opacity:.7}
+
+.tl-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.tl-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cyan);letter-spacing:.2em}
+.tl-item.now .tl-date{color:var(--violet)}
+.tl-item.future .tl-date{color:var(--muted)}
+.tl-status{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;padding:4px 10px;border-radius:6px;text-transform:uppercase}
+.tl-status.done{background:rgba(0,240,255,0.1);color:var(--cyan)}
+.tl-status.now{background:rgba(139,92,246,0.1);color:var(--violet)}
+.tl-status.future{background:rgba(255,255,255,0.04);color:var(--muted)}
+
+.tl-title{font-size:clamp(22px,2.4vw,28px);font-weight:600;line-height:1.2;letter-spacing:-.01em;margin-bottom:10px}
+.tl-text{color:var(--muted);font-size:15px;max-width:640px;margin-bottom:14px}
+.tl-quote{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink);padding:14px 18px;border-left:2px solid var(--cyan);background:rgba(0,240,255,0.04);border-radius:0 8px 8px 0;margin:14px 0}
+.tl-item.now .tl-quote{border-left-color:var(--violet);background:rgba(139,92,246,0.04)}
+
+.tl-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tl-tag{padding:4px 10px;border-radius:6px;background:rgba(255,255,255,0.04);font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:30px}
+@media(max-width:700px){.stats-row{grid-template-columns:1fr 1fr}}
+.stat{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:16px}
+.stat-num{font-size:22px;font-weight:600;font-family:'Space Grotesk';color:var(--ink)}
+.stat-num .unit{font-size:13px;color:var(--cyan);margin-left:2px}
+.stat-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-top:4px}
+
+.cta-row{display:flex;gap:14px;margin-top:40px;flex-wrap:wrap;justify-content:center}
+.btn{padding:14px 22px;border-radius:10px;font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:10px;transition:all .3s;border:1px solid var(--card-border)}
+.btn-primary{background:linear-gradient(120deg,var(--cyan),var(--violet));color:#000;border-color:transparent;font-weight:600}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(0,240,255,0.35)}
+.btn-ghost{background:var(--card);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
+.btn .arrow{transition:transform .3s}
+.btn:hover .arrow{transform:translate(3px,-3px)}
+
+footer{border-top:1px solid var(--line);padding:40px 32px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);position:relative;z-index:2;flex-wrap:wrap;gap:14px}
+footer a{transition:color .3s}
+footer a:hover{color:var(--cyan)}
+footer .blink{color:var(--lime);animation:pulse 1.5s ease-in-out infinite}
+
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .9s ease,transform .9s ease}
+.reveal.in{opacity:1;transform:none}
+
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.3;pointer-events:none;z-index:0}
+.orb-1{width:380px;height:380px;background:var(--cyan);top:30%;left:-100px}
+.orb-2{width:420px;height:420px;background:var(--violet);top:70%;right:-120px}
+</style>
+</head>
+<body>
+
+<div class="loader" id="loader">
+  <div class="loader-text">LOGGING JOURNEY.LOG</div>
+  <div class="loader-bar"></div>
+</div>
+
+<div class="cursor-dot" id="cDot"></div>
+<div class="cursor-ring" id="cRing"></div>
+
+<canvas id="neural"></canvas>
+<div class="grain"></div>
+
+<nav>
+  <a href="index.html" class="logo"><span class="logo-dot"></span> ESHAANT/DAYAPULE</a>
+  <div class="nav-links">
+    <a href="index.html">home</a>
+    <a href="stack.html">stack</a>
+    <a href="journey.html" class="active">journey</a>
+    <a href="manifesto.html">manifesto</a>
+    <a href="connect.html">connect</a>
+  </div>
+</nav>
+<div class="nav-mobile">
+  <a href="index.html">home</a>
+  <a href="stack.html">stack</a>
+  <a href="journey.html" class="active">journey</a>
+  <a href="manifesto.html">manifesto</a>
+  <a href="connect.html">connect</a>
+</div>
+
+<main>
+
+<div class="page-head">
+  <div class="orb orb-1"></div>
+  <div class="eyebrow reveal">// 003 — commit history</div>
+  <h1 class="page-title reveal">Journey,<br/><span class="grad">commit-by-commit</span>.</h1>
+  <p class="page-sub reveal">I'm using this platform to track progress and connect with the minds, innovators and visionaries making science fiction a reality. <b style="color:var(--ink)">No filter, no fake polish.</b></p>
+</div>
+
+<div class="meter-wrap reveal">
+  <div class="meter">
+    <div class="meter-label">LIFE.PROGRESS</div>
+    <div class="meter-bar"><div class="meter-fill"></div></div>
+    <div class="meter-pct">v0.18</div>
+    <div class="meter-text">// 18 / ∞ commits shipped. Building in public. The bar moves only when the work does.</div>
+  </div>
+</div>
+
+<div class="timeline-wrap">
+
+  <div class="timeline">
+
+    <div class="tl-item done reveal">
+      <div class="tl-card">
+        <div class="tl-head">
+          <div class="tl-date">2026 · FEB — JOINED X</div>
+          <span class="tl-status done">✓ shipped</span>
+        </div>
+        <h3 class="tl-title">The first commit.</h3>
+        <p class="tl-text">Created the account. Zero followers. No plan except to start. Sometimes the hardest line of code is opening the editor. The empty file is always the scariest.</p>
+        <div class="tl-quote">$ echo "hello world" &gt; journey.log</div>
+        <div class="tl-tags"><span class="tl-tag">day 1</span><span class="tl-tag">commit 0x01</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item done reveal">
+      <div class="tl-card">
+        <div class="tl-head">
+          <div class="tl-date">2026 · JUN 14</div>
+          <span class="tl-status done">✓ shipped</span>
+        </div>
+        <h3 class="tl-title">The introduction.</h3>
+        <p class="tl-text">First tweet. The moment of going public with the plan. A small promise to myself, witnessed by an algorithm — but that's how every build log starts.</p>
+        <div class="tl-quote">"I'm Eshaant, 18, stepping into the world of engineering. The plan is simple: understand, master, and build."</div>
+        <div class="tl-tags"><span class="tl-tag">first tweet</span><span class="tl-tag">public promise</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item done reveal">
+      <div class="tl-card">
+        <div class="tl-head">
+          <div class="tl-date">2026 · JUN → NOW</div>
+          <span class="tl-status done">✓ shipped</span>
+        </div>
+        <h3 class="tl-title">Following 29 people 10× ahead of me.</h3>
+        <p class="tl-text">Curated the feed. Builders, researchers, paper authors, hardware hackers. Reading threads, bookmarking repos, taking notes on how they think. Listening &gt; posting.</p>
+        <div class="stats-row">
+          <div class="stat"><div class="stat-num">29<span class="unit">▲</span></div><div class="stat-label">Following</div></div>
+          <div class="stat"><div class="stat-num">∞<span class="unit">+</span></div><div class="stat-label">Bookmarks</div></div>
+          <div class="stat"><div class="stat-num">12<span class="unit">+</span></div><div class="stat-label">Repos starred</div></div>
+          <div class="stat"><div class="stat-num">3<span class="unit">×</span></div><div class="stat-label">Papers read</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item now reveal">
+      <div class="tl-card">
+        <div class="tl-head">
+          <div class="tl-date">2026 · NOW · ACTIVE</div>
+          <span class="tl-status now">● in progress</span>
+        </div>
+        <h3 class="tl-title">Climbing the stack.</h3>
+        <p class="tl-text">Deep-diving into transformers from first principles. Picking up CUDA. Reading the original papers. Building small things. Breaking them. Documenting the journey — this site is one of them.</p>
+        <div class="tl-quote">// current focus: attention is all you need → reproducing it in pytorch from scratch</div>
+        <div class="tl-tags"><span class="tl-tag">pytorch</span><span class="tl-tag">cuda</span><span class="tl-tag">transformers</span><span class="tl-tag">paper-reading</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item future reveal">
+      <div class="tl-card">
+        <div class="tl-head">
+          <div class="tl-date">NEXT ▸ Q3 2026</div>
+          <span class="tl-status future">○ queued</span>
+        </div>
+        <h3 class="tl-title">Build something real. Ship it.</h3>
+        <p class="tl-text">An embodied agent? A tiny LLM running on an FPGA? A robotics side project? Undecided. But: <b style="color:var(--ink)">shipped beats perfect</b>. Expect commits, not announcements.</p>
+        <div class="tl-quote">target: 1 public repo with a working demo by end of Q3</div>
+        <div class="tl-tags"><span class="tl-tag">shipping</span><span class="tl-tag">side-project</span><span class="tl-tag">demo-day</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item future reveal">
+      <div class="tl-card">
+        <div class="tl-head">
+          <div class="tl-date">MID-TERM ▸▸ 2027</div>
+          <span class="tl-status future">○ vision</span>
+        </div>
+        <h3 class="tl-title">Contribute upstream.</h3>
+        <p class="tl-text">Open a real PR to a serious project. PyTorch, Hugging Face, Isaac, a paper reproduction — somewhere that matters. Stop being a tourist in the repo.</p>
+        <div class="tl-quote">$ git push origin feat/...</div>
+        <div class="tl-tags"><span class="tl-tag">open source</span><span class="tl-tag">pr merged</span><span class="tl-tag">real impact</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item future reveal">
+      <div class="tl-card">
+        <div class="tl-head">
+          <div class="tl-date">FAR FUTURE ▸▸▸ 2028+</div>
+          <span class="tl-status future">○ north star</span>
+        </div>
+        <h3 class="tl-title">Make science fiction real.</h3>
+        <p class="tl-text">The audacious version. Connect with the people doing it. Contribute something meaningful. Be one of them — not as a fan, but as a builder at the table.</p>
+        <div class="tl-quote">// if you're not building the future, you're renting it</div>
+        <div class="tl-tags"><span class="tl-tag">moonshot</span><span class="tl-tag">agi-adjacent</span><span class="tl-tag">embodied</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<section style="text-align:center;padding:100px 32px">
+  <div class="orb orb-2"></div>
+  <div class="eyebrow reveal" style="justify-content:center">// commit message</div>
+  <h2 class="page-title reveal" style="font-size:clamp(32px,5vw,52px);margin-bottom:30px">Why I do this —<br/>read the <span class="grad">manifesto</span>.</h2>
+  <div class="cta-row reveal">
+    <a class="btn btn-primary" href="manifesto.html">read manifesto <span class="arrow">→</span></a>
+    <a class="btn btn-ghost" href="index.html">back home <span class="arrow">↗</span></a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div>© 2026 <a href="index.html">ESHAANT DAYAPULE</a> · COMMITS = COMING</div>
+  <div>SYS <span class="blink">●</span> ONLINE</div>
+</footer>
+
+<script>
+window.addEventListener('load',()=>{setTimeout(()=>document.getElementById('loader').classList.add('hidden'),1900)});
+
+const cDot=document.getElementById('cDot'),cRing=document.getElementById('cRing');
+let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
+addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cDot.style.transform=`translate(${mx}px,${my}px) translate(-50%,-50%)`});
+function loop(){rx+=(mx-rx)*.18;ry+=(my-ry)*.18;cRing.style.transform=`translate(${rx}px,${ry}px) translate(-50%,-50%)`;requestAnimationFrame(loop)}
+loop();
+document.querySelectorAll('a,button,.btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cRing.classList.add('hover'));
+  el.addEventListener('mouseleave',()=>cRing.classList.remove('hover'));
+});
+
+const c=document.getElementById('neural'),ctx=c.getContext('2d');
+let w,h,nodes=[];
+function resize(){w=c.width=innerWidth;h=c.height=innerHeight;init()}
+addEventListener('resize',resize);
+function init(){nodes=[];const count=Math.min(90,Math.floor((w*h)/18000));for(let i=0;i<count;i++)nodes.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.5+0.5})}
+function draw(){
+  ctx.clearRect(0,0,w,h);
+  for(let i=0;i<nodes.length;i++){for(let j=i+1;j<nodes.length;j++){const a=nodes[i],b=nodes[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<140){const o=1-d/140;ctx.strokeStyle=`rgba(0,240,255,${o*0.25})`;ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}}}
+  nodes.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>w)n.vx*=-1;if(n.y<0||n.y>h)n.vy*=-1;ctx.fillStyle='rgba(139,92,246,0.9)';ctx.shadowBlur=12;ctx.shadowColor='rgba(0,240,255,0.6)';ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fill()});
+  ctx.shadowBlur=0;requestAnimationFrame(draw);
+}
+resize();draw();
+
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
