@@ -39,8 +39,7 @@ a{color:inherit;text-decoration:none;cursor:none}
 #neural{position:fixed;inset:0;width:100vw;height:100vh;max-width:100%;z-index:0;opacity:.55;pointer-events:none}
 .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(6,6,10,0.55);border-bottom:1px solid var(--line)}
-.logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;letter-spacing:.15em;display:flex;align-items:center;gap:10px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(6,6,10,0.55);border-bottom:1px solid var(--line);width:100%;max-width:100vw;box-sizing:border-box}.logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;letter-spacing:.15em;display:flex;align-items:center;gap:10px}
 .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 12px var(--lime);animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .nav-links{display:flex;gap:28px;font-size:13px;color:var(--muted)}
@@ -54,8 +53,20 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 32px;display:fl
 .nav-mobile{display:none}
 @media(max-width:900px){
   .nav-links{display:none}
-  .nav-mobile{display:flex;gap:10px;font-size:11px;padding:14px 24px;overflow-x:auto;background:rgba(6,6,10,0.6);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);position:fixed;top:60px;left:0;right:0;z-index:99;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;color:var(--muted)}
-  .nav-mobile a{padding:6px 12px;border:1px solid var(--card-border);border-radius:6px;flex-shrink:0;transition:all .3s}
+  .nav-mobile{
+    display:flex;gap:10px;font-size:11px;
+    padding:14px 20px;
+    overflow-x:scroll;overflow-y:hidden;
+    background:rgba(6,6,10,0.6);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    position:fixed;top:60px;left:0;right:0;
+    z-index:99;
+    font-family:'JetBrains Mono',monospace;letter-spacing:.1em;color:var(--muted);
+    scrollbar-width:none;-ms-overflow-style:none;
+    width:100%;max-width:100vw;box-sizing:border-box;
+  }
+  .nav-mobile::-webkit-scrollbar{display:none;width:0;height:0}
+  .nav-mobile a{padding:6px 12px;border:1px solid var(--card-border);border-radius:6px;flex-shrink:0;transition:all .3s;white-space:nowrap}
   .nav-mobile a:hover{border-color:var(--cyan);color:var(--cyan)}
   .nav-mobile a.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,240,255,0.05)}
 }
@@ -138,6 +149,40 @@ footer .blink{color:var(--lime);animation:pulse 1.5s ease-in-out infinite}
 .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.3;pointer-events:none;z-index:0}
 .orb-1{width:380px;height:380px;background:var(--cyan);top:30%;left:-100px}
 .orb-2{width:420px;height:420px;background:var(--violet);top:70%;right:-120px}
+
+/* ============ MOBILE NAV SCROLLBAR FIX ============ */
+@media(max-width:900px){
+  /* hide scrollbar on the mobile nav itself, keep swipe behavior */
+  .nav-mobile{
+    scrollbar-width:none;          /* Firefox */
+    -ms-overflow-style:none;       /* IE/old Edge */
+    scroll-behavior:smooth;
+    /* prevent nav from causing page-level horizontal scroll */
+    max-width:100vw;
+    box-sizing:border-box;
+  }
+  .nav-mobile::-webkit-scrollbar{display:none;width:0;height:0}
+  
+  /* lock every fixed/absolute element to viewport width */
+  nav,.nav-mobile{left:0;right:0;max-width:100%}
+  
+  /* ensure page itself doesn't horizontally scroll */
+  html,body{overflow-x:hidden!important;width:100%;max-width:100vw}
+  
+  /* catch any inner element that escapes viewport */
+  main,section,.hero,.hero-grid,.layer-grid,.stack-visual,.principles,
+  .timeline-wrap,.connect-wrap,.socials-section,.topics-section,
+  .meter-wrap,.page-head{overflow-x:hidden;max-width:100vw}
+  
+  /* pad nav links nicely when they don't fill the row */
+  .nav-mobile::after{
+    content:"";
+    flex:0 0 14px;          /* trailing spacer so last item isn't flush against edge */
+  }
+  
+  /* fix loader padding for very narrow screens */
+  .loader-text{font-size:10px;letter-spacing:.2em}
+}
 </style>
 </head>
 <body>
