@@ -12,8 +12,8 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#06060a;--ink:#e8e8f0;--muted:#8a8aa3;--cyan:#00f0ff;--violet:#8b5cf6;--pink:#ff2d8a;--lime:#a3ff12;--line:rgba(255,255,255,0.08);--card:rgba(255,255,255,0.03);--card-border:rgba(255,255,255,0.08)}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;line-height:1.6;overflow-x:hidden;overflow-y:scroll;cursor:none;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth;overflow-x:hidden;width:100%;max-width:100vw;scrollbar-gutter:stable}
+body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;line-height:1.6;overflow-x:hidden;cursor:none;-webkit-text-size-adjust:100%;scrollbar-gutter:stable}
 @media(max-width:900px){body{cursor:auto;overflow-x:hidden}}
 html{overflow-x:hidden;width:100%;max-width:100vw}
 @media(max-width:900px){body{cursor:auto}}
@@ -215,6 +215,33 @@ section,.hero,.hero-grid,.page-head,.stack-visual,.principles,.timeline-wrap,
 }
 /* the things that NEED hidden overflow keep it explicitly */
 .hero-card,.stat,.chip,.tl-card::before,.contact-card::before{overflow:hidden}
+
+/* ============ CLEAN SCROLLBARS ============ */
+
+/* hide horizontal scrollbar globally */
+html,body{overflow-x:hidden!important;max-width:100vw!important}
+
+/* lock every container to viewport width to prevent any horizontal scroll */
+nav,.nav-mobile,main,section,.hero,.hero-grid,.page-head,.stack-visual,
+.principles,.timeline-wrap,.meter-wrap,.socials-section,.topics-section,
+.big-cta,.closing,.layer,.connect-wrap,.reveal,#neural,.grain,.loader,
+footer,.marquee,.marquee-track{
+  max-width:100vw;
+  box-sizing:border-box;
+}
+
+/* style the vertical scrollbar to be subtle, dark-themed (desktop only) */
+@media(min-width:901px){
+  html{scrollbar-width:thin;scrollbar-color:rgba(0,240,255,0.25) transparent}
+  html::-webkit-scrollbar{width:8px}
+  html::-webkit-scrollbar-track{background:transparent}
+  html::-webkit-scrollbar-thumb{
+    background:rgba(0,240,255,0.2);
+    border-radius:4px;
+    transition:background .3s;
+  }
+  html::-webkit-scrollbar-thumb:hover{background:rgba(0,240,255,0.5)}
+}
 </style>
 </head>
 <body>
