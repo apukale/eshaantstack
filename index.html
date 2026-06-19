@@ -257,13 +257,7 @@ section,.hero,.hero-grid,.page-head,.stack-visual,.principles,.timeline-wrap,
 }
 /* the things that NEED hidden overflow keep it explicitly */
 .hero-card,.stat,.chip,.tl-card::before,.contact-card::before{overflow:hidden}
- /* ============ IMMEDIATE REVEAL FOR ABOVE-FOLD ============ */
-document.querySelectorAll('.page-head, .hero, .hero-grid').forEach(el=>{
-  if(el.classList.contains('reveal')){
-    // reveal immediately, no waiting for intersection
-    requestAnimationFrame(()=>el.classList.add('in'));
-  }
-});
+
 </style>
 </head>
 <body>
@@ -489,6 +483,13 @@ document.querySelectorAll('.stack-card').forEach(card=>{
     card.style.setProperty('--mx',`${e.clientX-r.left}px`);
     card.style.setProperty('--my',`${e.clientY-r.top}px`);
   });
+});
+  /* ============ IMMEDIATE REVEAL FOR ABOVE-FOLD ============ */
+document.querySelectorAll('.page-head, .hero, .hero-grid').forEach(el=>{
+  if(el.classList.contains('reveal')){
+    // reveal immediately, no waiting for intersection
+    requestAnimationFrame(()=>el.classList.add('in'));
+  }
 });
  document.querySelectorAll('.page-head, .hero, .hero-grid, .hero .eyebrow, .hero .glitch, .hero .hero-sub, .hero .cta-row, .hero .meta, .hero-card, .marquee').forEach(el=>{
   if(el.classList.contains('reveal')){
