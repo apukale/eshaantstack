@@ -12,34 +12,35 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#06060a;--ink:#e8e8f0;--muted:#8a8aa3;--cyan:#00f0ff;--violet:#8b5cf6;--pink:#ff2d8a;--lime:#a3ff12;--line:rgba(255,255,255,0.08);--card:rgba(255,255,255,0.03);--card-border:rgba(255,255,255,0.08)}
-html{scroll-behavior:smooth;overflow-x:hidden;width:100%;max-width:100vw;scrollbar-gutter:stable}
-body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;line-height:1.6;overflow-x:hidden;cursor:none;-webkit-text-size-adjust:100%;scrollbar-gutter:stable}
-@media(max-width:900px){body{cursor:auto;overflow-x:hidden}}
-html{overflow-x:hidden;width:100%;max-width:100vw}
+
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;line-height:1.6;overflow-x:hidden;cursor:none;-webkit-text-size-adjust:100%}
 @media(max-width:900px){body{cursor:auto}}
 a{color:inherit;text-decoration:none;cursor:none}
 @media(max-width:900px){a{cursor:pointer}}
 
+/* CURSOR */
 .cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;border-radius:50%;mix-blend-mode:difference}
 .cursor-dot{width:6px;height:6px;background:#fff;transform:translate(-50%,-50%)}
 .cursor-ring{width:36px;height:36px;border:1px solid rgba(255,255,255,0.6);transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s}
 .cursor-ring.hover{width:60px;height:60px;border-color:var(--cyan)}
 @media(max-width:900px){.cursor-dot,.cursor-ring{display:none}}
 
+/* LOADER */
 .loader{position:fixed;inset:0;width:100vw;height:100dvh;min-height:100vh;background:var(--bg);z-index:9998;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity .8s ease,visibility .8s;padding:0 24px}
-@media(max-width:900px){
-  .loader{height:100dvh;min-height:-webkit-fill-available;padding-bottom:env(safe-area-inset-bottom)}
-}
+@media(max-width:900px){.loader{height:100dvh;min-height:-webkit-fill-available;padding-bottom:env(safe-area-inset-bottom)}}
 .loader.hidden{opacity:0;visibility:hidden}
 .loader-text{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.3em;margin-bottom:20px}
 .loader-bar{width:240px;height:1px;background:rgba(255,255,255,0.08);overflow:hidden;position:relative}
 .loader-bar::after{content:"";position:absolute;left:0;top:0;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--violet));animation:load 1.8s ease-in-out forwards}
 @keyframes load{to{width:100%}}
 
+/* BACKGROUND */
 #neural{position:fixed;inset:0;width:100vw;height:100vh;max-width:100%;z-index:0;opacity:.55;pointer-events:none}
 .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(6,6,10,0.55);border-bottom:1px solid var(--line);width:100%;max-width:100vw;box-sizing:border-box}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(6,6,10,0.55);border-bottom:1px solid var(--line)}
 .logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;letter-spacing:.15em;display:flex;align-items:center;gap:10px}
 .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 12px var(--lime);animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
@@ -51,6 +52,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 32px;display:fl
 .nav-links a.active{color:var(--cyan)}
 .nav-links a.active::after{width:100%}
 
+/* MOBILE NAV */
 .nav-mobile{display:none}
 @media(max-width:900px){
   .nav-links{display:none}
@@ -60,18 +62,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 32px;display:fl
     overflow-x:scroll;overflow-y:hidden;
     background:rgba(6,6,10,0.6);backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line);
-    position:fixed;top:60px;left:0;right:0;
-    z-index:99;
+    position:fixed;top:60px;left:0;right:0;z-index:99;
     font-family:'JetBrains Mono',monospace;letter-spacing:.1em;color:var(--muted);
     scrollbar-width:none;-ms-overflow-style:none;
-    width:100%;max-width:100vw;box-sizing:border-box;
   }
   .nav-mobile::-webkit-scrollbar{display:none;width:0;height:0}
   .nav-mobile a{padding:6px 12px;border:1px solid var(--card-border);border-radius:6px;flex-shrink:0;transition:all .3s;white-space:nowrap}
   .nav-mobile a:hover{border-color:var(--cyan);color:var(--cyan)}
   .nav-mobile a.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,240,255,0.05)}
+  .nav-mobile::after{content:"";flex:0 0 14px}
+  .loader-text{font-size:10px;letter-spacing:.2em}
 }
 
+/* MAIN */
 main{position:relative;z-index:2}
 .page-head{padding:160px 32px 80px;max-width:1100px;margin:0 auto;position:relative;text-align:center}
 .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;color:var(--cyan);text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:10px;justify-content:center}
@@ -82,6 +85,7 @@ main{position:relative;z-index:2}
 
 section{padding:60px 32px;max-width:1100px;margin:0 auto;position:relative}
 
+/* PRINCIPLES */
 .principles{padding:80px 32px;max-width:1100px;margin:0 auto;position:relative}
 .principle{padding:50px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:120px 1fr;gap:40px;align-items:start}
 .principle:last-child{border-bottom:none}
@@ -94,6 +98,7 @@ section{padding:60px 32px;max-width:1100px;margin:0 auto;position:relative}
 .p-body .p-tags{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
 .p-tag{padding:5px 12px;border-radius:6px;background:rgba(0,240,255,0.06);border:1px solid rgba(0,240,255,0.2);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cyan);letter-spacing:.05em}
 
+/* CLOSING */
 .closing{padding:100px 32px;max-width:900px;margin:0 auto;position:relative;text-align:center}
 .big-quote{font-size:clamp(28px,4vw,56px);font-weight:300;line-height:1.15;letter-spacing:-.02em;margin-bottom:40px}
 .big-quote b{color:var(--cyan);font-weight:500}
@@ -101,6 +106,7 @@ section{padding:60px 32px;max-width:1100px;margin:0 auto;position:relative}
 .sig{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.2em;margin-top:30px}
 .sig b{color:var(--ink);font-weight:500}
 
+/* CTA */
 .cta-row{display:flex;gap:14px;margin-top:40px;flex-wrap:wrap;justify-content:center}
 .btn{padding:14px 22px;border-radius:10px;font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:10px;transition:all .3s;border:1px solid var(--card-border)}
 .btn-primary{background:linear-gradient(120deg,var(--cyan),var(--violet));color:#000;border-color:transparent;font-weight:600}
@@ -110,105 +116,59 @@ section{padding:60px 32px;max-width:1100px;margin:0 auto;position:relative}
 .btn .arrow{transition:transform .3s}
 .btn:hover .arrow{transform:translate(3px,-3px)}
 
+/* FOOTER */
 footer{border-top:1px solid var(--line);padding:40px 32px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);position:relative;z-index:2;flex-wrap:wrap;gap:14px}
 footer a{transition:color .3s}
 footer a:hover{color:var(--cyan)}
 footer .blink{color:var(--lime);animation:pulse 1.5s ease-in-out infinite}
 
+/* REVEAL */
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;will-change:opacity,transform}
 .reveal.in{opacity:1;transform:none}
-/* mobile: skip the translate, just fade — prevents the "scrolling inside the box" illusion */
 @media(max-width:900px){
   .reveal{transform:none;transition:opacity .5s ease}
   .reveal.in{transform:none}
 }
-/* reduce motion preference */
 @media(prefers-reduced-motion:reduce){
   .reveal,.reveal.in{opacity:1!important;transform:none!important;transition:none!important}
 }
 
+/* ORBS */
 .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.35;pointer-events:none;z-index:0}
 .orb-1{width:500px;height:500px;background:var(--cyan);top:15%;left:-150px}
 .orb-2{width:500px;height:500px;background:var(--violet);top:50%;right:-150px}
 .orb-3{width:400px;height:400px;background:var(--pink);bottom:0;left:30%}
 
+/* TYPE HERO (cat manifesto.md) */
 .type-hero{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--muted);letter-spacing:.1em;margin-top:20px;min-height:24px}
 .type-hero b{color:var(--cyan);font-weight:400}
 .type-hero .cursor{display:inline-block;width:8px;height:14px;background:var(--cyan);margin-left:2px;vertical-align:middle;animation:blink 1s step-end infinite}
 @keyframes blink{50%{opacity:0}}
 
-/* ============ MOBILE NAV SCROLLBAR FIX ============ */
-@media(max-width:900px){
-  /* hide scrollbar on the mobile nav itself, keep swipe behavior */
-  .nav-mobile{
-    scrollbar-width:none;          /* Firefox */
-    -ms-overflow-style:none;       /* IE/old Edge */
-    scroll-behavior:smooth;
-    /* prevent nav from causing page-level horizontal scroll */
-    max-width:100vw;
-    box-sizing:border-box;
-  }
-  .nav-mobile::-webkit-scrollbar{display:none;width:0;height:0}
-  
-  /* lock every fixed/absolute element to viewport width */
-  nav,.nav-mobile{left:0;right:0;max-width:100%}
-  
-  /* ensure page itself doesn't horizontally scroll */
-  html,body{overflow-x:hidden!important;width:100%;max-width:100vw}
-  
-  /* catch any inner element that escapes viewport */
-  main,section,.hero,.hero-grid,.layer-grid,.stack-visual,.principles,
-  .timeline-wrap,.connect-wrap,.socials-section,.topics-section,
-  .meter-wrap,.page-head{overflow-x:hidden;max-width:100vw}
-  
-  /* pad nav links nicely when they don't fill the row */
-  .nav-mobile::after{
-    content:"";
-    flex:0 0 14px;          /* trailing spacer so last item isn't flush against edge */
-  }
-  
-  /* fix loader padding for very narrow screens */
-  .loader-text{font-size:10px;letter-spacing:.2em}
+/* ============ SCROLLBAR FIX (SINGLE SOURCE OF TRUTH) ============ */
+
+html,body{overflow-x:clip!important}
+@supports not (overflow:clip){
+  html,body{overflow-x:hidden!important}
 }
 
-/* ============ ANTI-CLIP FIX ============ */
-section,.hero,.hero-grid,.page-head,.stack-visual,.principles,.timeline-wrap,
-.meter-wrap,.socials-section,.topics-section,.big-cta,.closing,.layer,.connect-wrap{
-  overflow:visible!important;
-  transform:none;
-}
-/* hero card / quote / tl-card / etc — make sure they don't clip */
-.hero-card,.quote,.tl-card,.contact-card,.stat,.layer-grid,.layer,.stack-card{
-  overflow:visible;
-}
-/* the things that NEED hidden overflow keep it explicitly */
-.hero-card,.stat,.chip,.tl-card::before,.contact-card::before{overflow:hidden}
-
-/* ============ CLEAN SCROLLBARS ============ */
-
-/* hide horizontal scrollbar globally */
-html,body{overflow-x:hidden!important;max-width:100vw!important}
-
-/* lock every container to viewport width to prevent any horizontal scroll */
-nav,.nav-mobile,main,section,.hero,.hero-grid,.page-head,.stack-visual,
-.principles,.timeline-wrap,.meter-wrap,.socials-section,.topics-section,
-.big-cta,.closing,.layer,.connect-wrap,.reveal,#neural,.grain,.loader,
-footer,.marquee,.marquee-track{
-  max-width:100vw;
-  box-sizing:border-box;
-}
-
-/* style the vertical scrollbar to be subtle, dark-themed (desktop only) */
 @media(min-width:901px){
-  html{scrollbar-width:thin;scrollbar-color:rgba(0,240,255,0.25) transparent}
-  html::-webkit-scrollbar{width:8px}
+  html{
+    scrollbar-width:thin;
+    scrollbar-color:rgba(0,240,255,0.25) transparent;
+    scrollbar-gutter:stable;
+  }
+  html::-webkit-scrollbar{width:8px;height:8px}
   html::-webkit-scrollbar-track{background:transparent}
   html::-webkit-scrollbar-thumb{
     background:rgba(0,240,255,0.2);
     border-radius:4px;
-    transition:background .3s;
   }
   html::-webkit-scrollbar-thumb:hover{background:rgba(0,240,255,0.5)}
+}
+
+@media(max-width:900px){
+  html,body{overflow-x:hidden!important}
 }
 </style>
 </head>
@@ -357,10 +317,9 @@ resize();draw();
 const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-/* ============ IMMEDIATE REVEAL FOR ABOVE-FOLD ============ */
-document.querySelectorAll('.page-head, .hero, .hero-grid').forEach(el=>{
+/* immediate reveal for above-fold (page-head) */
+document.querySelectorAll('.page-head').forEach(el=>{
   if(el.classList.contains('reveal')){
-    // reveal immediately, no waiting for intersection
     requestAnimationFrame(()=>el.classList.add('in'));
   }
 });
