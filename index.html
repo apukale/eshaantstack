@@ -194,8 +194,17 @@ html{overflow-x:hidden;width:100%;max-width:100vw}
   footer a:hover{color:var(--cyan)}
   footer .blink{color:var(--lime);animation:pulse 1.5s ease-in-out infinite}
 
-  .reveal{opacity:0;transform:translateY(30px);transition:opacity .9s ease,transform .9s ease}
-  .reveal.in{opacity:1;transform:none}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;will-change:opacity,transform}
+.reveal.in{opacity:1;transform:none}
+/* mobile: skip the translate, just fade — prevents the "scrolling inside the box" illusion */
+@media(max-width:900px){
+  .reveal{transform:none;transition:opacity .5s ease}
+  .reveal.in{transform:none}
+}
+/* reduce motion preference */
+@media(prefers-reduced-motion:reduce){
+  .reveal,.reveal.in{opacity:1!important;transform:none!important;transition:none!important}
+}
 
   .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.35;pointer-events:none;z-index:0}
   .orb-1{width:380px;height:380px;background:var(--cyan);top:10%;left:-100px}
@@ -235,6 +244,26 @@ html{overflow-x:hidden;width:100%;max-width:100vw}
   /* fix loader padding for very narrow screens */
   .loader-text{font-size:10px;letter-spacing:.2em}
 }
+
+ /* ============ ANTI-CLIP FIX ============ */
+section,.hero,.hero-grid,.page-head,.stack-visual,.principles,.timeline-wrap,
+.meter-wrap,.socials-section,.topics-section,.big-cta,.closing,.layer,.connect-wrap{
+  overflow:visible!important;
+  transform:none;
+}
+/* hero card / quote / tl-card / etc — make sure they don't clip */
+.hero-card,.quote,.tl-card,.contact-card,.stat,.layer-grid,.layer,.stack-card{
+  overflow:visible;
+}
+/* the things that NEED hidden overflow keep it explicitly */
+.hero-card,.stat,.chip,.tl-card::before,.contact-card::before{overflow:hidden}
+ /* ============ IMMEDIATE REVEAL FOR ABOVE-FOLD ============ */
+document.querySelectorAll('.page-head, .hero, .hero-grid').forEach(el=>{
+  if(el.classList.contains('reveal')){
+    // reveal immediately, no waiting for intersection
+    requestAnimationFrame(()=>el.classList.add('in'));
+  }
+});
 </style>
 </head>
 <body>
@@ -460,6 +489,11 @@ document.querySelectorAll('.stack-card').forEach(card=>{
     card.style.setProperty('--mx',`${e.clientX-r.left}px`);
     card.style.setProperty('--my',`${e.clientY-r.top}px`);
   });
+});
+ document.querySelectorAll('.page-head, .hero, .hero-grid, .hero .eyebrow, .hero .glitch, .hero .hero-sub, .hero .cta-row, .hero .meta, .hero-card, .marquee').forEach(el=>{
+  if(el.classList.contains('reveal')){
+    requestAnimationFrame(()=>el.classList.add('in'));
+  }
 });
 </script>
 </body>
